@@ -13,7 +13,7 @@ export default (type, resource, params) => {
     console.log(type, resource, params);
     switch (type) {
         case GET_LIST:
-            return fetch(`http://localhost:8080/${resource}/?filter=${params.filter.q}`).then(response => response.json()).then(json => {
+            return fetch(`/${resource}/?filter=${params.filter.q}`).then(response => response.json()).then(json => {
                 return {
                     data: json.map(x => {x.id = x.Id; return x;}),
                     total: json.length
@@ -21,20 +21,18 @@ export default (type, resource, params) => {
             });
             break;
         case UPDATE:
-            return fetch(`http://localhost:8080/${resource}`, {
+            return fetch(`/${resource}`, {
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         method: "POST",
-                        body: JSON.stringify(params.data) })
-                    .then(response => response.json()).then(json => {
-                        // console.log(json);
+                        body: JSON.stringify(params.data)
                     });
             break;
         case GET_MATCHING:
         case GET_ONE:
-            return fetch(`http://localhost:8080/${resource}/?id=${params.id}`).then(response => response.json()).then(json => {
-                return fetch(`http://localhost:8080/email-templates/?id=${params.id}`).then(response => response.json()).then(emailTemplates => {
+            return fetch(`/${resource}/?id=${params.id}`).then(response => response.json()).then(json => {
+                return fetch(`/email-templates/?id=${params.id}`).then(response => response.json()).then(emailTemplates => {
                     let courseEmail = emailTemplates.filter(val => val.Type === "OnlineBookingCustomerCourse");
                     let sessionEmail = emailTemplates.filter(val => val.Type === "OnlineBookingCustomerSession");
                     return json.map(x => {

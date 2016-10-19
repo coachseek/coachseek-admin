@@ -1,15 +1,14 @@
 'use strict';
-console.log("STARTED");
 
-let sql = require('mssql');
-let express = require('express');
-let bodyParser = require('body-parser');
-let app = express();
+const sql = require('mssql');
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
 app.use( bodyParser.json() );
 
-let DEFAULT_PORT = process.env.PORT || 8080;
+const DEFAULT_PORT = process.env.PORT || 8080;
 
-let config = {
+const config = {
     server: 'idlf08a7kb.database.windows.net',
     user: 'coachseek@idlf08a7kb',
     password: 'W#ggie1267',
@@ -45,7 +44,6 @@ app.get('/business', function(req, res) {
                 console.log(err);
             });
         } else {
-            // sql.query`SELECT * from Business ORDER BY id OFFSET 10 ROWS FETCH NEXT 10 ROWS ONLY`.then(function(recordset) {
             sql.query`SELECT TOP 10 * from Business`.then(function(recordset) {
                 res.send(recordset);
             }).catch(function(err) {
