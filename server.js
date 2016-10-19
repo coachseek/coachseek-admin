@@ -8,11 +8,11 @@ const app = express();
 app.use( bodyParser.json() );
 
 // DEVELOPMENT
-// app.set('port', (process.env.API_PORT || 3001));
+app.set('port', (process.env.API_PORT || 3001));
 
 //PROD
-app.set('port', (process.env.PORT || 3001));
-app.use(express.static(path.join(__dirname, 'client/build')));
+// app.set('port', (process.env.PORT || 3001));
+// app.use(express.static(path.join(__dirname, 'client/build')));
 
 const config = {
     server: 'idlf08a7kb.database.windows.net',
