@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use( bodyParser.json() );
 
-const DEFAULT_PORT = process.env.PORT || 8080;
+app.set('port', (process.env.API_PORT || 3001));
 
 const config = {
     server: 'idlf08a7kb.database.windows.net',
@@ -17,16 +17,6 @@ const config = {
         encrypt: true
     }
 };
-app.use(function(req, res, next) {
-    // Set permissive CORS header - this allows this server to be used only as
-    // an API server in conjunction with something like webpack-dev-server.
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.header("Access-Control-Allow-Headers", "Content-Type, Accept");
-
-    // Disable caching so we'll always get the latest comments.
-    res.setHeader('Cache-Control', 'no-cache');
-    next();
-});
 
 app.get('/business', function(req, res) {
     sql.connect(config).then(() => {
@@ -98,4 +88,6 @@ app.post('/business', function(req, res) {
     });
 });
 
-app.listen(DEFAULT_PORT);
+app.listen(app.get('port'), () => {
+  console.log(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
+});

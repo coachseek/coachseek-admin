@@ -9,11 +9,23 @@ import {
     DELETE
 } from 'admin-on-rest';
 
+function checkStatus(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return response.json();
+  } else {
+    const error = new Error(`HTTP Error ${response.statusText}`);
+    error.status = response.statusText;
+    error.response = response;
+    console.log(error); // eslint-disable-line no-console
+    throw error;
+  }
+}
+
 export default (type, resource, params) => {
     console.log(type, resource, params);
     switch (type) {
         case GET_LIST:
-            return fetch(`/${resource}/?filter=${params.filter.q}`).then(response => response.json()).then(json => {
+            return fetch(`/${resource}/?filter=${params.filter.q}`).then(checkStatus).then(json => {
                 return {
                     data: json.map(x => {x.id = x.Id; return x;}),
                     total: json.length
@@ -31,7 +43,7 @@ export default (type, resource, params) => {
             break;
         case GET_MATCHING:
         case GET_ONE:
-            return fetch(`/${resource}/?id=${params.id}`).then(response => response.json()).then(json => {
+            return fetch(`/${resource}/?id=${params.id}`).then(checkStatus).then(json => {
                 return fetch(`/email-templates/?id=${params.id}`).then(response => response.json()).then(emailTemplates => {
                     let courseEmail = emailTemplates.filter(val => val.Type === "OnlineBookingCustomerCourse");
                     let sessionEmail = emailTemplates.filter(val => val.Type === "OnlineBookingCustomerSession");
