@@ -2,11 +2,8 @@
   "name": "coachseek-admin",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3001/",
-  "devDependencies": {
-    "react-scripts": "0.6.1"
-  },
   "dependencies": {
+    "react-scripts": "0.6.1",
     "admin-on-rest": "^0.2.0",
     "mssql": "^3.3.0",
     "react": "^15.3.2",
